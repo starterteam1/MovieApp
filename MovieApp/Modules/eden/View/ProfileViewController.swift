@@ -11,6 +11,8 @@ import Then
 
 final class ProfileViewController: UIViewController {
     
+    private let viewModel = TestViewModel()
+    
     private var profileImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.image = UIImage(systemName: "person.circle")
@@ -47,8 +49,6 @@ final class ProfileViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = Colors.primary
         
-        title = "Profile"
-        
         [profileImageView, nameLabel, bookingsLabel, bookingsTableView].forEach {
             view.addSubview($0)
         }
@@ -57,7 +57,7 @@ final class ProfileViewController: UIViewController {
             $0.width.equalToSuperview().multipliedBy(0.4)
             $0.height.equalTo(profileImageView.snp.width)
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().multipliedBy(0.4)
+            $0.centerY.equalToSuperview().multipliedBy(0.5)
         }
         
         nameLabel.snp.makeConstraints {
@@ -90,14 +90,16 @@ extension ProfileViewController: UITableViewDelegate {
 
 extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        viewModel.numberOfRows
     }
-    
+    //연산 프로퍼티 ViewModel에
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BookingsCell.id) as? BookingsCell else {
             return UITableViewCell() }
+        let index = indexPath.row
+        //index ViewModel에 보내기
+        let booking = viewModel.makeDataSource(index: index)
+        cell.setupCell(string: booking)
         return cell
     }
-    
-    
 }
