@@ -13,19 +13,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
-        setupGlobalTabBarAppearance()
-        setupGlobalNavigationBarAppearance()
-        
-        let window = UIWindow(windowScene: windowScene)
-//        window.rootViewController =  UINavigationController(rootViewController: LoginViewController())
-        window.rootViewController = TabController()
-        window.makeKeyAndVisible()
-        self.window = window
+
+        window = UIWindow(windowScene: windowScene)
+        let navController = UINavigationController(rootViewController: MoviesViewController())
+        window?.rootViewController = navController
+        window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -55,51 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-    
-    private func setupGlobalTabBarAppearance() {
-        // 탭바 타이틀 색상 설정 (전역 적용)
-        UITabBarItem.appearance().setTitleTextAttributes(
-            [.foregroundColor: Colors.tabBarUnselected],
-            for: .normal
-        )
-        UITabBarItem.appearance().setTitleTextAttributes(
-            [.foregroundColor: UIColor.white],
-            for: .selected
-        )
 
-        // 아이콘 색상
-        UITabBar.appearance().tintColor = .white
-        UITabBar.appearance().unselectedItemTintColor = Colors.tabBarUnselected
-
-        // 배경색 (UITabBarAppearance)
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = Colors.tabBarBackground
-
-        // 선택 / 비선택 아이템에 대해 필요하면 추가 설정 가능
-        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .white
-        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = Colors.tabBarUnselected
-
-        UITabBar.appearance().standardAppearance = tabBarAppearance
-        if #available(iOS 15.0, *) {
-            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        }
-    }
-    
-    private func setupGlobalNavigationBarAppearance() {
-        let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.configureWithOpaqueBackground()
-        navBarAppearance.backgroundColor = Colors.tabBarBackground // 네비게이션 바 배경
-        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white] // 기본 타이틀 색상
-        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white] // Large Title 색상
-
-        // 글로벌 설정
-        UINavigationBar.appearance().standardAppearance = navBarAppearance
-        UINavigationBar.appearance().compactAppearance = navBarAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
-
-        UINavigationBar.appearance().tintColor = .white // Back 버튼 & BarButtonItem 색상
-    }
 
 }
 
