@@ -25,6 +25,14 @@ final class SignupViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
+    private let userNameerrorLabel = UILabel().then {
+        $0.text = "⚠︎ Incorrect username."
+        $0.textColor = .red
+        $0.font = .systemFont(ofSize: 16, weight: .medium)
+        $0.numberOfLines = 1
+        $0.alpha = 0
+    }
+    
     private let passwordTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(
                 string: "Password",
@@ -53,6 +61,14 @@ final class SignupViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
+    private let passwordErrorLabel = UILabel().then {
+        $0.text = "⚠︎ Incorrect password."
+        $0.textColor = .red
+        $0.font = .systemFont(ofSize: 16, weight: .medium)
+        $0.numberOfLines = 1
+        $0.alpha = 0
+    }
+    
     private let signupButton = UIButton(type: .system).then {
         $0.setTitle("Sign Up", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
@@ -75,7 +91,7 @@ final class SignupViewController: UIViewController {
             .foregroundColor: UIColor.white
         ]
         
-        [usernameTextField, passwordTextField, confirmTextField, signupButton].forEach {
+        [usernameTextField, userNameerrorLabel, passwordTextField, confirmTextField, passwordErrorLabel, signupButton].forEach {
             view.addSubview($0)
         }
         
@@ -86,10 +102,15 @@ final class SignupViewController: UIViewController {
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
         
+        userNameerrorLabel.snp.makeConstraints {
+            $0.top.equalTo(usernameTextField.snp.bottom).offset(6)
+            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+        }
+        
         passwordTextField.snp.makeConstraints {
             $0.height.equalTo(56)
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(usernameTextField.snp.bottom).offset(16)
+            $0.top.equalTo(usernameTextField.snp.bottom).offset(32)
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
         
@@ -97,6 +118,11 @@ final class SignupViewController: UIViewController {
             $0.height.equalTo(56)
             $0.centerX.equalToSuperview()
             $0.top.equalTo(passwordTextField.snp.bottom).offset(16)
+            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        passwordErrorLabel.snp.makeConstraints {
+            $0.top.equalTo(confirmTextField.snp.bottom).offset(6)
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
         

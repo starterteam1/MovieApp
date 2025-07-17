@@ -24,6 +24,14 @@ final class LoginViewController: UIViewController {
         $0.numberOfLines = 1
     }
     
+    private let errorLabel = UILabel().then {
+        $0.text = "⚠︎ Incorrect username or password."
+        $0.textColor = .red
+        $0.font = .systemFont(ofSize: 16, weight: .medium)
+        $0.numberOfLines = 1
+        $0.alpha = 0
+    }
+    
     private let usernameTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(
                 string: "Username",
@@ -92,23 +100,38 @@ final class LoginViewController: UIViewController {
         setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     private func setupUI() {
         view.backgroundColor = Colors.primary
         
-        [imageView, introLabel, usernameTextField, passwordTextField, loginButton, signupButton].forEach {
+        [imageView, introLabel, errorLabel, usernameTextField, passwordTextField, loginButton, signupButton].forEach {
             view.addSubview($0)
         }
         
         imageView.snp.makeConstraints {
-            $0.height.equalTo(196)
+            $0.width.equalToSuperview().multipliedBy(0.5)
+            $0.height.equalTo(imageView.snp.width)
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().multipliedBy(0.5)
-            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+            $0.centerY.equalToSuperview().offset(-view.frame.height * 0.25)
         }
         
         introLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(imageView.snp.bottom).offset(32)
+            $0.top.equalTo(imageView.snp.bottom).offset(20)
+            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        errorLabel.snp.makeConstraints {
+            $0.top.equalTo(passwordTextField.snp.bottom).offset(6)
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
         
