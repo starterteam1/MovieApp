@@ -11,6 +11,8 @@ import Then
 
 final class BookingsCell: UITableViewCell {
     
+    private let viewModel = TestViewModel()
+    
     static let id = "BookingsCell"
     
     private let movieImageView = UIImageView().then {
@@ -26,7 +28,6 @@ final class BookingsCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
-        setupCell()
     }
     
     required init?(coder: NSCoder) {
@@ -59,9 +60,9 @@ final class BookingsCell: UITableViewCell {
         }
     }
     
-    public func setupCell() {
+    public func setupCell(string: String) {
         movieImageView.image = UIImage(systemName: "film")
-        movieLabel.text = "Name"
+        movieLabel.text = string
         informationLabel.text = "Information"
     }
     
