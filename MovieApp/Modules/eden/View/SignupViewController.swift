@@ -11,6 +11,8 @@ import Then
 
 final class SignupViewController: UIViewController {
     
+    private let loginViewModel = LoginViewModel()
+    
     private let usernameTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(
                 string: "Username",
@@ -53,6 +55,12 @@ final class SignupViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
+    private let errorLabel = UILabel().then {
+        $0.textColor = .red
+        $0.font = .systemFont(ofSize: 16, weight: .medium)
+        $0.numberOfLines = 1
+    }
+    
     private let signupButton = UIButton(type: .system).then {
         $0.setTitle("Sign Up", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
@@ -75,7 +83,11 @@ final class SignupViewController: UIViewController {
             .foregroundColor: UIColor.white
         ]
         
-        [usernameTextField, passwordTextField, confirmTextField, signupButton].forEach {
+        [passwordTextField, confirmTextField].forEach {
+            $0.isSecureTextEntry = true
+        }
+        
+        [usernameTextField, errorLabel, passwordTextField, confirmTextField, signupButton].forEach {
             view.addSubview($0)
         }
         
@@ -100,6 +112,11 @@ final class SignupViewController: UIViewController {
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
         
+        errorLabel.snp.makeConstraints {
+            $0.top.equalTo(confirmTextField.snp.bottom).offset(6)
+            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+        }
+        
         signupButton.snp.makeConstraints {
             $0.height.equalTo(48)
             $0.centerX.equalToSuperview()
@@ -107,6 +124,24 @@ final class SignupViewController: UIViewController {
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
         
+        signupButton.addTarget(self, action: #selector(signupTapped), for: .touchUpInside)
+        
+    }
+    
+    @objc private func signupTapped() {
+        let username = usernameTextField.text
+        let password = passwordTextField.text
+        let passwordConfirmation = confirmTextField.text
+
+        do {
+            try loginViewModel.saveUserAccount(username: username, password: password, passwordConfirmation: passwordConfirmation)
+            errorLabel.text = ""
+            navigationController?.popViewController(animated: true)
+        } catch let error as LoginError {
+            errorLabel.text = error.localizedDescription
+        } catch {
+            errorLabel.text = "⚠︎ An unknown error occurred"
+        }
     }
     
 }

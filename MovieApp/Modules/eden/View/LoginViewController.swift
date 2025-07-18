@@ -11,6 +11,8 @@ import Then
 
 final class LoginViewController: UIViewController {
     
+    private let loginViewModel = LoginViewModel()
+    
     private let imageView = UIImageView().then {
         $0.image = UIImage(named: "loginLogo")
         $0.contentMode = .scaleAspectFit
@@ -21,6 +23,12 @@ final class LoginViewController: UIViewController {
         $0.textColor = .white
         $0.textAlignment = .center
         $0.font = .systemFont(ofSize: 20, weight: .medium)
+        $0.numberOfLines = 1
+    }
+    
+    private let errorLabel = UILabel().then {
+        $0.textColor = .red
+        $0.font = .systemFont(ofSize: 16, weight: .medium)
         $0.numberOfLines = 1
     }
     
@@ -92,23 +100,40 @@ final class LoginViewController: UIViewController {
         setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     private func setupUI() {
         view.backgroundColor = Colors.primary
         
-        [imageView, introLabel, usernameTextField, passwordTextField, loginButton, signupButton].forEach {
+        passwordTextField.isSecureTextEntry = true
+        
+        [imageView, introLabel, errorLabel, usernameTextField, passwordTextField, loginButton, signupButton].forEach {
             view.addSubview($0)
         }
         
         imageView.snp.makeConstraints {
-            $0.height.equalTo(196)
+            $0.width.equalToSuperview().multipliedBy(0.5)
+            $0.height.equalTo(imageView.snp.width)
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().multipliedBy(0.5)
-            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+            $0.centerY.equalToSuperview().offset(-view.frame.height * 0.25)
         }
         
         introLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalTo(imageView.snp.bottom).offset(32)
+            $0.top.equalTo(imageView.snp.bottom).offset(20)
+            $0.directionalHorizontalEdges.equalToSuperview().inset(20)
+        }
+        
+        errorLabel.snp.makeConstraints {
+            $0.top.equalTo(passwordTextField.snp.bottom).offset(6)
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
         }
         
@@ -142,6 +167,7 @@ final class LoginViewController: UIViewController {
         loginButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
         signupButton.addTarget(self, action: #selector(signupTapped), for: .touchUpInside)
         
+        //키보드 대응
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -150,7 +176,29 @@ final class LoginViewController: UIViewController {
     }
     
     @objc private func loginTapped() {
-        print("Login Tapped")
+        let username = usernameTextField.text
+        let password = passwordTextField.text
+
+        do {
+            try loginViewModel.login(username: username, password: password)
+            errorLabel.text = ""
+            let tabController = TabController()
+            
+            // SceneDelegate 접근하여 rootViewController 변경
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
+               let window = sceneDelegate.window {
+                window.rootViewController = tabController
+                UIView.transition(with: window,
+                                  duration: 0.3,
+                                  options: .transitionFlipFromRight,
+                                  animations: nil,
+                                  completion: nil)
+            }
+        } catch let error as LoginError {
+            errorLabel.text = error.localizedDescription
+        } catch {
+            errorLabel.text = "⚠︎ An unknown error occurred"
+        }
     }
     
     @objc private func signupTapped() {
