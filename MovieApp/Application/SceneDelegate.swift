@@ -16,8 +16,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         window = UIWindow(windowScene: windowScene)
-        let navController = UINavigationController(rootViewController: MoviesViewController())
-        window?.rootViewController = navController
+        // Create TabBarController
+        let tabBarController = UITabBarController()
+
+        // Create each tab
+        let homeVC = UIViewController().then { $0.view.backgroundColor = .black }
+        homeVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house.fill"), tag: 0)
+
+        let searchVC = SearchViewController()
+        searchVC.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+
+        let profileVC = UIViewController().then { $0.view.backgroundColor = .black }
+        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 2)
+
+        // Set ViewControllers to TabBar
+        let controllers = [homeVC, searchVC, profileVC].map { UINavigationController(rootViewController: $0) }
+        tabBarController.viewControllers = controllers
+        
+        // Set the root view controller
+        window?.rootViewController = tabBarController
         window?.makeKeyAndVisible()
     }
 
