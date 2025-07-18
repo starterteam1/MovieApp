@@ -28,7 +28,6 @@ struct Movie: Decodable {
         return URL(string: "https://image.tmdb.org/t/p/w500\(path)")
     }
 
-    
     enum CodingKeys: String, CodingKey {
         case id, title
         case posterPath = "poster_path"
