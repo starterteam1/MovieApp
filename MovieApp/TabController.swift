@@ -15,21 +15,24 @@ class TabController: UITabBarController {
     }
     
     private func setupTabs() {
-        let home = createNav(with: "Home", and: UIImage(systemName: "house"), vc: MoviesViewController())
-//        let search = createNav(with: "Search", and: UIImage(systemName: "magnifyingglass"), vc: TestViewController2())
-        let profile = createNav(with: "Profile", and: UIImage(systemName: "person"), vc: ProfileViewController())
+        let homeVC = MoviesViewController()
+        homeVC.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
         
-        setViewControllers([home, profile], animated: true)
+        let profileVC = ProfileViewController()
+        profileVC.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person"), tag: 1)
+        
+        setViewControllers([homeVC, profileVC], animated: true)
     }
     
-    private func createNav(with title: String, and image: UIImage?, vc: UIViewController) -> UINavigationController {
-        let nav = UINavigationController(rootViewController: vc)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
-        nav.tabBarItem.title = title
-        nav.tabBarItem.image = image
+        // 탭바를 화면 상단으로 이동
+        var frame = tabBar.frame
+        frame.origin.y = 0 // 상단 고정
+        tabBar.frame = frame
         
-        nav.viewControllers.first?.navigationItem.title = title
-            
-        return nav
+        // 콘텐츠가 가려지지 않도록 inset 조정
+        additionalSafeAreaInsets.top = tabBar.frame.height
     }
 }

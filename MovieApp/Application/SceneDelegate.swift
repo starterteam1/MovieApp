@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         setupGlobalTabBarAppearance()
-        setupGlobalNavigationBarAppearance()
+//        setupGlobalNavigationBarAppearance()
 
         window = UIWindow(windowScene: windowScene)
         let navController = UINavigationController(rootViewController: LoginViewController())
@@ -82,19 +82,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    private func setupGlobalNavigationBarAppearance() {
-        let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.configureWithOpaqueBackground()
-        navBarAppearance.backgroundColor = Colors.tabBarBackground // 네비게이션 바 배경
-        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white] // 기본 타이틀 색상
-        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white] // Large Title 색상
-
-        // 글로벌 설정
-        UINavigationBar.appearance().standardAppearance = navBarAppearance
-        UINavigationBar.appearance().compactAppearance = navBarAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
-
-        UINavigationBar.appearance().tintColor = .white // Back 버튼 & BarButtonItem 색상
-    }
+//    private func setupGlobalNavigationBarAppearance() {
+//        let navBarAppearance = UINavigationBarAppearance()
+//        navBarAppearance.configureWithOpaqueBackground()
+//        navBarAppearance.backgroundColor = Colors.tabBarBackground // 네비게이션 바 배경
+//        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white] // 기본 타이틀 색상
+//        navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white] // Large Title 색상
+//
+//        // 글로벌 설정
+//        UINavigationBar.appearance().standardAppearance = navBarAppearance
+//        UINavigationBar.appearance().compactAppearance = navBarAppearance
+//        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+//
+//        UINavigationBar.appearance().tintColor = .white // Back 버튼 & BarButtonItem 색상
+//    }
 }
 
