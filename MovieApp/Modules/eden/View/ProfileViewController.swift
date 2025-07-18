@@ -17,8 +17,7 @@ final class ProfileViewController: UIViewController {
         $0.contentMode = .scaleAspectFit
         $0.image = UIImage(systemName: "person.circle")
         $0.tintColor = .white
-        $0.layer.cornerRadius = 80
-        $0.clipsToBounds = true
+        $0.layer.masksToBounds = true
     }
     
     private var nameLabel = UILabel().then {
@@ -57,14 +56,13 @@ final class ProfileViewController: UIViewController {
             $0.width.equalToSuperview().multipliedBy(0.4)
             $0.height.equalTo(profileImageView.snp.width)
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().multipliedBy(0.5)
+            $0.centerY.equalToSuperview().offset(-view.frame.height * 0.25)
         }
         
         nameLabel.snp.makeConstraints {
             $0.top.equalTo(profileImageView.snp.bottom).offset(16)
             $0.directionalHorizontalEdges.equalToSuperview().inset(20)
             $0.centerX.equalToSuperview()
-            
         }
         
         bookingsLabel.snp.makeConstraints {
@@ -80,6 +78,12 @@ final class ProfileViewController: UIViewController {
         }
         
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
+    }
+    
 }
 
 extension ProfileViewController: UITableViewDelegate {

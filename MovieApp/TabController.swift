@@ -15,11 +15,11 @@ class TabController: UITabBarController {
     }
     
     private func setupTabs() {
-//        let home = createNav(with: "Home", and: UIImage(systemName: "house"), vc: TestViewController1())
+        let home = createNav(with: "Home", and: UIImage(systemName: "house"), vc: MoviesViewController())
 //        let search = createNav(with: "Search", and: UIImage(systemName: "magnifyingglass"), vc: TestViewController2())
         let profile = createNav(with: "Profile", and: UIImage(systemName: "person"), vc: ProfileViewController())
         
-        setViewControllers([profile], animated: true)
+        setViewControllers([home, profile], animated: true)
     }
     
     private func createNav(with title: String, and image: UIImage?, vc: UIViewController) -> UINavigationController {
