@@ -7,6 +7,15 @@
 
 import Foundation
 
+struct CreditsResponse: Decodable {
+    let crew: [CrewMember]
+}
+
+struct CrewMember: Decodable {
+    let job: String
+    let name: String
+}
+
 struct MovieResponse: Decodable {
     let results: [Movie]
 }
@@ -17,6 +26,8 @@ struct Movie: Decodable {
     let posterPath: String?
     let overview: String?
     let backdropPath: String?
+    let rating: Double?
+    let releaseDate: String?
 
     var fullPosterURL: String? {
         guard let path = posterPath else { return nil }
@@ -33,6 +44,8 @@ struct Movie: Decodable {
         case posterPath = "poster_path"
         case overview
         case backdropPath = "backdrop_path"
+        case rating = "vote_average"
+        case releaseDate = "release_date"
     }
 }
 
