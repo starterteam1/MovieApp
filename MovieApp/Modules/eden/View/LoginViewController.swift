@@ -11,6 +11,8 @@ import Then
 
 final class LoginViewController: UIViewController {
     
+    private let loginViewModel = LoginViewModel()
+    
     private let imageView = UIImageView().then {
         $0.image = UIImage(named: "loginLogo")
         $0.contentMode = .scaleAspectFit
@@ -25,11 +27,9 @@ final class LoginViewController: UIViewController {
     }
     
     private let errorLabel = UILabel().then {
-        $0.text = "⚠︎ Incorrect username or password."
         $0.textColor = .red
         $0.font = .systemFont(ofSize: 16, weight: .medium)
         $0.numberOfLines = 1
-        $0.alpha = 0
     }
     
     private let usernameTextField = UITextField().then {
@@ -113,6 +113,8 @@ final class LoginViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = Colors.primary
         
+        passwordTextField.isSecureTextEntry = true
+        
         [imageView, introLabel, errorLabel, usernameTextField, passwordTextField, loginButton, signupButton].forEach {
             view.addSubview($0)
         }
@@ -165,6 +167,7 @@ final class LoginViewController: UIViewController {
         loginButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
         signupButton.addTarget(self, action: #selector(signupTapped), for: .touchUpInside)
         
+        //키보드 대응
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -173,7 +176,29 @@ final class LoginViewController: UIViewController {
     }
     
     @objc private func loginTapped() {
-        print("Login Tapped")
+        let username = usernameTextField.text
+        let password = passwordTextField.text
+
+        do {
+            try loginViewModel.login(username: username, password: password)
+            errorLabel.text = ""
+            let tabController = TabController()
+            
+            // SceneDelegate 접근하여 rootViewController 변경
+            if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
+               let window = sceneDelegate.window {
+                window.rootViewController = tabController
+                UIView.transition(with: window,
+                                  duration: 0.3,
+                                  options: .transitionFlipFromRight,
+                                  animations: nil,
+                                  completion: nil)
+            }
+        } catch let error as LoginError {
+            errorLabel.text = error.localizedDescription
+        } catch {
+            errorLabel.text = "⚠︎ An unknown error occurred"
+        }
     }
     
     @objc private func signupTapped() {
