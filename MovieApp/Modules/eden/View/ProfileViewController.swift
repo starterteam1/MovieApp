@@ -11,7 +11,20 @@ import Then
 
 final class ProfileViewController: UIViewController {
     
+    private let loginViewModel = LoginViewModel()
     private let viewModel = TestViewModel()
+    
+    private var username: String?
+    private let logoutButton = UIButton().then {
+        var config = UIButton.Configuration.filled()
+        config.title = "Logout"
+        config.baseBackgroundColor = .red
+        config.baseForegroundColor = .white
+        config.cornerStyle = .medium
+        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+        
+        $0.configuration = config
+    }
     
     private var profileImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -22,7 +35,6 @@ final class ProfileViewController: UIViewController {
     
     private var nameLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 22, weight: .bold)
-        $0.text = "User Name"
         $0.textColor = .white
         $0.textAlignment = .center
     }
@@ -48,8 +60,13 @@ final class ProfileViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = Colors.primary
         
-        [profileImageView, nameLabel, bookingsLabel, bookingsTableView].forEach {
+        [logoutButton, profileImageView, nameLabel, bookingsLabel, bookingsTableView].forEach {
             view.addSubview($0)
+        }
+        
+        logoutButton.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(-32)
+            $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-16)
         }
         
         profileImageView.snp.makeConstraints {
@@ -77,6 +94,30 @@ final class ProfileViewController: UIViewController {
             $0.bottom.equalToSuperview()
         }
         
+        logoutButton.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
+        
+        if let accounts = UserDefaults.standard.array(forKey: "accounts") as? [[String: String]],
+           let lastAccount = accounts.last,
+           let username = lastAccount["username"] {
+            nameLabel.text = username
+        }
+        
+    }
+    
+    @objc private func logoutTapped() {
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
+           let window = sceneDelegate.window {
+            
+            let loginVC = LoginViewController()
+            let navController = UINavigationController(rootViewController: loginVC)
+            
+            window.rootViewController = navController
+            UIView.transition(with: window,
+                              duration: 0.3,
+                              options: .transitionFlipFromRight,
+                              animations: nil,
+                              completion: nil)
+        }
     }
     
     override func viewDidLayoutSubviews() {

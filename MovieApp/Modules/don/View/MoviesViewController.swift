@@ -117,7 +117,7 @@ class MoviesViewController: UIViewController {
         movieCollectionView.translatesAutoresizingMaskIntoConstraints = false
 
         filterStackView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(32)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(-32)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().inset(16)
         }
