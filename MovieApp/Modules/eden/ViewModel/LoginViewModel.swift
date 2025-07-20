@@ -43,8 +43,11 @@ enum LoginError: LocalizedError {
 }
 
 final class LoginViewModel {
+    
+    var username: String = ""
+    
     private let repository = UserAccountRepository()
-
+    
     // 회원가입
     func saveUserAccount(username: String?, password: String?, passwordConfirmation: String?) throws {
         try validateUserInput(username: username, password: password, passwordConfirmation: passwordConfirmation)
@@ -94,9 +97,11 @@ final class LoginViewModel {
               let password = password, !password.isEmpty else {
             throw LoginError.emptyFields
         }
-
+        
         guard repository.validateUser(username: username, password: password) else {
             throw LoginError.invalidCredentials
         }
+        
+        self.username = username
     }
 }

@@ -30,6 +30,8 @@ class MovieDetailViewController: UIViewController {
 
     private func setupUI() {
         view.backgroundColor = UIColor(hex: "#121417")
+        
+        title = "Detail"
 
         let scrollView = UIScrollView()
         let contentView = UIView()
@@ -37,24 +39,18 @@ class MovieDetailViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
 
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
 
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-        ])
+        contentView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.frameLayoutGuide)
+        }
 
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 12
         imageView.clipsToBounds = true
         if let url = movie.posterURL {
             imageView.kf.setImage(with: url)
@@ -73,7 +69,7 @@ class MovieDetailViewController: UIViewController {
 
         let directorTitle = UILabel()
         directorTitle.text = "Release Date"
-        directorTitle.font = .boldSystemFont(ofSize: 16)
+        directorTitle.font = .boldSystemFont(ofSize: 20)
         directorTitle.textColor = .white
 
         directorLabel.text = movie.releaseDate ?? "출시일 정보 없음"
@@ -82,7 +78,7 @@ class MovieDetailViewController: UIViewController {
 
         let ratingTitle = UILabel()
         ratingTitle.text = "Ratings"
-        ratingTitle.font = .boldSystemFont(ofSize: 16)
+        ratingTitle.font = .boldSystemFont(ofSize: 20)
         ratingTitle.textColor = .white
 
         let scoreLabel = UILabel()
@@ -116,7 +112,7 @@ class MovieDetailViewController: UIViewController {
 
         let bookButton = UIButton()
         bookButton.setTitle("Book Tickets", for: .normal)
-        bookButton.backgroundColor = UIColor(hex: "#9B51E0")
+        bookButton.backgroundColor = UIColor(hex: "#7A1CAC")
         bookButton.setTitleColor(.white, for: .normal)
         bookButton.layer.cornerRadius = 12
         bookButton.titleLabel?.font = .boldSystemFont(ofSize: 16)

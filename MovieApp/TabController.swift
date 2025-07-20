@@ -9,27 +9,31 @@ import UIKit
 
 class TabController: UITabBarController {
     
+    private var username: String
+    
+    init(username: String) {
+        self.username = username
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabs()
     }
     
     private func setupTabs() {
-        let home = createNav(with: "Home", and: UIImage(systemName: "house"), vc: MoviesViewController())
-//        let search = createNav(with: "Search", and: UIImage(systemName: "magnifyingglass"), vc: TestViewController2())
-        let profile = createNav(with: "Profile", and: UIImage(systemName: "person"), vc: ProfileViewController())
-        
-        setViewControllers([home, profile], animated: true)
-    }
-    
-    private func createNav(with title: String, and image: UIImage?, vc: UIViewController) -> UINavigationController {
-        let nav = UINavigationController(rootViewController: vc)
-        
-        nav.tabBarItem.title = title
-        nav.tabBarItem.image = image
-        
-        nav.viewControllers.first?.navigationItem.title = title
-            
-        return nav
+        let homeVC = MoviesViewController()
+        let homeNav = UINavigationController(rootViewController: homeVC)
+        homeNav.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
+
+        let profileVC = ProfileViewController(username: username)
+        let profileNav = UINavigationController(rootViewController: profileVC)
+        profileNav.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person"), tag: 1)
+
+        setViewControllers([homeNav, profileNav], animated: true)
     }
 }
