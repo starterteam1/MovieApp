@@ -11,6 +11,7 @@ import Kingfisher
 class MovieDetailViewController: UIViewController {
 
     private let movie: Movie
+    private let directorLabel = UILabel()
 
     init(movie: Movie) {
         self.movie = movie
@@ -71,12 +72,11 @@ class MovieDetailViewController: UIViewController {
         overviewLabel.numberOfLines = 0
 
         let directorTitle = UILabel()
-        directorTitle.text = "Director"
+        directorTitle.text = "Release Date"
         directorTitle.font = .boldSystemFont(ofSize: 16)
         directorTitle.textColor = .white
 
-        let directorLabel = UILabel()
-        directorLabel.text = "Christopher Nolan" // 예시 하드코딩
+        directorLabel.text = movie.releaseDate ?? "출시일 정보 없음"
         directorLabel.font = .systemFont(ofSize: 16)
         directorLabel.textColor = .white
 
@@ -86,12 +86,27 @@ class MovieDetailViewController: UIViewController {
         ratingTitle.textColor = .white
 
         let scoreLabel = UILabel()
-        scoreLabel.text = "4.2"
+        if let rating = movie.rating {
+            scoreLabel.text = String(format: "%.1f", rating)
+        } else {
+            scoreLabel.text = "N/A"
+        }
         scoreLabel.font = .boldSystemFont(ofSize: 28)
         scoreLabel.textColor = .white
 
         let starsLabel = UILabel()
-        starsLabel.text = "⭐️⭐️⭐️⭐️☆"
+        if let rating = movie.rating {
+            let fullStars = Int(rating / 2) // 10점 만점 → 5점 만점으로 변환
+            let halfStar = rating.truncatingRemainder(dividingBy: 2) >= 1.0
+            var stars = String(repeating: "★", count: fullStars)
+            if halfStar {
+                stars += "☆"
+            }
+            stars += String(repeating: "☆", count: 5 - stars.count)
+            starsLabel.text = stars
+        } else {
+            starsLabel.text = "☆☆☆☆☆"
+        }
         starsLabel.textColor = .white
 
         let reviewCountLabel = UILabel()
@@ -122,10 +137,11 @@ class MovieDetailViewController: UIViewController {
             stack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
 
-            imageView.heightAnchor.constraint(equalToConstant: 300),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.5),
             bookButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
+    
 }
 
 extension UIColor {

@@ -38,7 +38,7 @@ class MoviesViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 250)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * 0.35, height: 250)
         layout.minimumLineSpacing = 16
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
@@ -49,7 +49,7 @@ class MoviesViewController: UIViewController {
     private let horizontalCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 250)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width * 0.35, height: 250)
         layout.minimumLineSpacing = 16
         layout.sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16) // ⬅️ 이 줄 추가
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -61,6 +61,9 @@ class MoviesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        
+        updateButtonStyles(selectedButton: nowPlayingButton)
+        didTapNowPlaying()
         
         movieCollectionView.dataSource = self
         movieCollectionView.delegate = self
