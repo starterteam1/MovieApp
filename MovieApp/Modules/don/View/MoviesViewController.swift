@@ -82,7 +82,7 @@ class MoviesViewController: UIViewController {
             self?.movieCollectionView.reloadData()
         }
 
-        MovieService.shared.fetchUpcomingMovies { [weak self] movies in
+        MovieService.shared.fetchNowPlayingMovies { [weak self] movies in
             self?.horizontalMovies = movies
             self?.horizontalCollectionView.reloadData()
         }
@@ -90,6 +90,7 @@ class MoviesViewController: UIViewController {
     
     private func setupUI() {
         view.backgroundColor = .systemBackground
+        
         title = "Movies"
         
         // Filter Buttons
@@ -100,7 +101,7 @@ class MoviesViewController: UIViewController {
         [nowPlayingButton, comingSoonButton, exclusiveButton].forEach {
             $0.setTitleColor(.white, for: .normal)
             $0.backgroundColor = UIColor(red: 122/255, green: 28/255, blue: 172/255, alpha: 1.0)
-            $0.layer.cornerRadius = 18
+            $0.layer.cornerRadius = 12
             $0.heightAnchor.constraint(equalToConstant: 42).isActive = true
             filterStackView.addArrangedSubview($0)
         }
@@ -120,7 +121,7 @@ class MoviesViewController: UIViewController {
         movieCollectionView.translatesAutoresizingMaskIntoConstraints = false
 
         filterStackView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(-32)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().inset(16)
         }
@@ -219,7 +220,7 @@ class MovieCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .black
-        contentView.layer.cornerRadius = 18
+        contentView.layer.cornerRadius = 12
         contentView.clipsToBounds = true
 
         contentView.addSubview(posterImageView)

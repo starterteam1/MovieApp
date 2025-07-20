@@ -11,20 +11,30 @@ import Then
 
 final class ProfileViewController: UIViewController {
     
+    private var username: String
+    
+    init(username: String) {
+        self.username = username
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private let loginViewModel = LoginViewModel()
     private let viewModel = TestViewModel()
     
-    private var username: String?
-    private let logoutButton = UIButton().then {
-        var config = UIButton.Configuration.filled()
-        config.title = "Logout"
-        config.baseBackgroundColor = .red
-        config.baseForegroundColor = .white
-        config.cornerStyle = .medium
-        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-        
-        $0.configuration = config
-    }
+//    private let logoutButton = UIButton().then {
+//        var config = UIButton.Configuration.filled()
+//        config.title = "Logout"
+//        config.baseBackgroundColor = .red
+//        config.baseForegroundColor = .white
+//        config.cornerStyle = .medium
+//        config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+//        
+//        $0.configuration = config
+//    }
     
     private var profileImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
@@ -60,14 +70,26 @@ final class ProfileViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = Colors.primary
         
-        [logoutButton, profileImageView, nameLabel, bookingsLabel, bookingsTableView].forEach {
+        title = "Profile"
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Logout",
+            style: .plain,
+            target: self,
+            action: #selector(logoutTapped)
+        )
+        navigationItem.rightBarButtonItem?.tintColor = .red
+        
+        [/*logoutButton, */profileImageView, nameLabel, bookingsLabel, bookingsTableView].forEach {
             view.addSubview($0)
         }
         
-        logoutButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(-32)
-            $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-16)
-        }
+        nameLabel.text = username
+        
+//        logoutButton.snp.makeConstraints {
+//            $0.top.equalTo(view.safeAreaLayoutGuide)
+//            $0.trailing.equalTo(view.safeAreaLayoutGuide).offset(-16)
+//        }
         
         profileImageView.snp.makeConstraints {
             $0.width.equalToSuperview().multipliedBy(0.4)
@@ -94,13 +116,7 @@ final class ProfileViewController: UIViewController {
             $0.bottom.equalToSuperview()
         }
         
-        logoutButton.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
-        
-        if let accounts = UserDefaults.standard.array(forKey: "accounts") as? [[String: String]],
-           let lastAccount = accounts.last,
-           let username = lastAccount["username"] {
-            nameLabel.text = username
-        }
+//        logoutButton.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
         
     }
     
