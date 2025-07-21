@@ -11,17 +11,6 @@ import Then
 
 final class ProfileViewController: UIViewController {
     
-    private var username: String
-    
-    init(username: String) {
-        self.username = username
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     private let loginViewModel = LoginViewModel()
     private let viewModel = TestViewModel()
     
@@ -83,8 +72,7 @@ final class ProfileViewController: UIViewController {
         [/*logoutButton, */profileImageView, nameLabel, bookingsLabel, bookingsTableView].forEach {
             view.addSubview($0)
         }
-        
-        nameLabel.text = username
+        nameLabel.text = loginViewModel.getUsername() ?? "User Name"
         
 //        logoutButton.snp.makeConstraints {
 //            $0.top.equalTo(view.safeAreaLayoutGuide)
@@ -121,6 +109,7 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func logoutTapped() {
+        loginViewModel.logout()
         if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,
            let window = sceneDelegate.window {
             
@@ -134,6 +123,11 @@ final class ProfileViewController: UIViewController {
                               animations: nil,
                               completion: nil)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        bookingsTableView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -151,16 +145,15 @@ extension ProfileViewController: UITableViewDelegate {
 
 extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.numberOfRows
+        return BookingViewModel.shared.numberOfRows
     }
-    //연산 프로퍼티 ViewModel에
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookingsCell.id) as? BookingsCell else {
-            return UITableViewCell() }
-        let index = indexPath.row
-        //index ViewModel에 보내기
-        let booking = viewModel.makeDataSource(index: index)
-        cell.setupCell(string: booking)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: BookingsCell.id, for: indexPath) as? BookingsCell else {
+            return UITableViewCell()
+        }
+        let booking = BookingViewModel.shared.booking(at: indexPath.row)
+        cell.setupCell(with: booking)
         return cell
     }
 }

@@ -182,7 +182,7 @@ final class LoginViewController: UIViewController {
         do {
             try loginViewModel.login(username: username, password: password)
             errorLabel.text = ""
-            let tabController = TabController(username: loginViewModel.username)
+            let tabController = TabController()
             
             // SceneDelegate 접근하여 rootViewController 변경
             if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate,

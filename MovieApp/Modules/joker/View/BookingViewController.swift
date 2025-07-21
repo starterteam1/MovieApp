@@ -6,14 +6,10 @@ import Then
 class BookingViewController: UIViewController {
 
     // MARK: - Properties
-    var movie: Movie? {
-        didSet {
-            // Update the title when a movie is set
-            self.title = movie?.title ?? "Booking"
-        }
-    }
+    var movie: Movie?
     private var selectedDateButton: UIButton?
     private var selectedTimeButton: UIButton?
+    private var viewModel: BookingViewModel!
 
     // MARK: - UI Components
     private let dateLabel = UILabel().then {
@@ -110,6 +106,8 @@ class BookingViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
             make.height.equalTo(50)
         }
+        
+        proceedButton.addTarget(self, action: #selector(payButtonTapped), for: .touchUpInside)
     }
 
     private func setupButtons() {
@@ -159,5 +157,19 @@ class BookingViewController: UIViewController {
         sender.backgroundColor = Colors.point
         sender.isSelected = true
         selectedTimeButton = sender
+    }
+    
+    @objc private func payButtonTapped() {
+        guard let movie = movie,
+              let date = selectedDateButton?.title(for: .normal),
+              let time = selectedTimeButton?.title(for: .normal) else { return }
+
+        BookingViewModel.shared.addBooking(movie: movie, date: date, time: time) { [weak self] in
+            self?.tabBarController?.selectedIndex = 2
+
+            if let navController = self?.tabBarController?.viewControllers?[0] as? UINavigationController {
+                navController.popToRootViewController(animated: false)
+            }
+        }
     }
 }
