@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F25961232E28EE7500F77154 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = F25961222E28EE7500F77154 /* Kingfisher */; };
 		F2730BD42E2621AB00E35561 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = F2730BD32E2621AB00E35561 /* SnapKit */; };
 		F2730BD72E2621E700E35561 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = F2730BD62E2621E700E35561 /* Then */; };
 		F2730BDA2E2621F900E35561 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = F2730BD92E2621F900E35561 /* Alamofire */; };
@@ -42,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F25961232E28EE7500F77154 /* Kingfisher in Frameworks */,
 				F2730BDA2E2621F900E35561 /* Alamofire in Frameworks */,
 				F2730BD42E2621AB00E35561 /* SnapKit in Frameworks */,
 				F2730BD72E2621E700E35561 /* Then in Frameworks */,
@@ -90,6 +92,7 @@
 				F2730BD32E2621AB00E35561 /* SnapKit */,
 				F2730BD62E2621E700E35561 /* Then */,
 				F2730BD92E2621F900E35561 /* Alamofire */,
+				F25961222E28EE7500F77154 /* Kingfisher */,
 			);
 			productName = MovieApp;
 			productReference = F2730B8A2E261C6000E35561 /* MovieApp.app */;
@@ -123,6 +126,7 @@
 				F2730BD22E2621AB00E35561 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				F2730BD52E2621E700E35561 /* XCRemoteSwiftPackageReference "Then" */,
 				F2730BD82E2621F900E35561 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				F25961212E28EE7500F77154 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F2730B8B2E261C6000E35561 /* Products */;
@@ -162,6 +166,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5JJJ2SU6RD;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MovieApp/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -189,6 +194,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5JJJ2SU6RD;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MovieApp/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -352,6 +358,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F25961212E28EE7500F77154 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.5.0;
+			};
+		};
 		F2730BD22E2621AB00E35561 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -379,6 +393,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F25961222E28EE7500F77154 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F25961212E28EE7500F77154 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		F2730BD32E2621AB00E35561 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F2730BD22E2621AB00E35561 /* XCRemoteSwiftPackageReference "SnapKit" */;
