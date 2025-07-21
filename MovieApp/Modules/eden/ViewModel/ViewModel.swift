@@ -1,11 +1,12 @@
 //
-//  LoginViewModel.swift
+//  ViewModel.swift
 //  MovieApp
 //
 //  Created by 김이든 on 7/17/25.
 //
 
 import Foundation
+import UIKit
 
 enum LoginError: LocalizedError {
     case emptyFields
@@ -43,8 +44,6 @@ enum LoginError: LocalizedError {
 }
 
 final class LoginViewModel {
-    
-    var username: String = ""
     
     private let repository = UserAccountRepository()
     
@@ -102,6 +101,40 @@ final class LoginViewModel {
             throw LoginError.invalidCredentials
         }
         
-        self.username = username
+        repository.setCurrentUser(username: username)
+    }
+    
+    // 계정이름 불러오기
+    
+    func getUsername() -> String? {
+        return repository.getCurrentUser()
+    }
+    
+    // 로그아웃
+    func logout() {
+        repository.clearCurrentUser()
+    }
+    
+    
+}
+
+final class BookingViewModel {
+    static let shared = BookingViewModel()
+    private init() {}
+
+    private var bookings: [MovieBooking] = []
+
+    var numberOfRows: Int {
+        return bookings.count
+    }
+
+    func booking(at index: Int) -> MovieBooking {
+        return bookings[index]
+    }
+
+    func addBooking(movie: Movie, date: String, time: String, completion: @escaping () -> Void) {
+        let booking = MovieBooking(movieTitle: movie.title, date: date, time: time, imageURL: movie.posterURL)
+        bookings.append(booking)
+        completion()
     }
 }
