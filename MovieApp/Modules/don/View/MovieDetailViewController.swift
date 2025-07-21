@@ -9,6 +9,8 @@ import UIKit
 import Kingfisher
 
 class MovieDetailViewController: UIViewController {
+    
+    private let viewModel = SearchViewModel()
 
     private let movie: Movie
     private let directorLabel = UILabel()
@@ -136,6 +138,15 @@ class MovieDetailViewController: UIViewController {
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.5),
             bookButton.heightAnchor.constraint(equalToConstant: 50)
         ])
+        
+        bookButton.addTarget(self, action: #selector(bookButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func bookButtonTapped() {
+        let selectedMovie = movie
+        let bookingVC = BookingViewController()
+        bookingVC.movie = selectedMovie
+        navigationController?.pushViewController(bookingVC, animated: true)
     }
     
 }
